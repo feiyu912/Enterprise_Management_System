@@ -10,6 +10,8 @@ import com.feiyu.service.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.List;
+
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
@@ -27,5 +29,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         
         // 执行分页查询
         return this.page(new Page<>(param.getPageNum(), param.getPageSize()), wrapper);
+    }
+
+    @Override
+    public List<User> getSalesStaff() {
+        return baseMapper.selectSalesStaff();
     }
 } 

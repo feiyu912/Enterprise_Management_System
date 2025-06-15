@@ -25,12 +25,17 @@ const routes = [
         meta: { title: '产品管理', icon: 'Goods' }
       },
       {
-        path: 'system',
-        name: 'System',
-        component: () => import('@/views/system/index.vue'),
-        meta: { title: '系统管理', icon: 'Setting' }
+        path: 'customer',
+        name: 'Customer',
+        component: () => import('@/views/customer/index.vue'),
+        meta: { title: '客户管理', icon: 'UserFilled' }
       }
     ]
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: () => import('@/views/login/index.vue')
   }
 ]
 

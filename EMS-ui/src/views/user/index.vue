@@ -15,8 +15,8 @@
       <el-table
         v-loading="loading"
         :data="tableData"
-        style="width: 100%"
         border
+        style="width: 100%"
         stripe
         highlight-current-row
         :header-cell-style="{
@@ -182,8 +182,8 @@ const getList = async () => {
       pageNum: currentPage.value,
       pageSize: pageSize.value
     })
-    tableData.value = res.records
-    total.value = res.total
+    tableData.value = res.data.records
+    total.value = res.data.total
   } catch (error) {
     console.error('获取用户列表失败:', error)
     ElMessage.error('获取用户列表失败')

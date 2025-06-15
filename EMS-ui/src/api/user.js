@@ -1,9 +1,26 @@
 import request from '@/utils/request'
 
+// 用户登录
+export function login(data) {
+  return request({
+    url: '/api/user/login',
+    method: 'post',
+    data
+  })
+}
+
+// 获取用户信息
+export function getUserInfo() {
+  return request({
+    url: '/api/user/info',
+    method: 'get'
+  })
+}
+
 // 获取用户列表
 export function getUserList(params) {
   return request({
-    url: '/user/list',
+    url: '/api/user/list',
     method: 'get',
     params
   })
@@ -12,7 +29,7 @@ export function getUserList(params) {
 // 添加用户
 export function addUser(data) {
   return request({
-    url: '/user/add',
+    url: '/api/user/add',
     method: 'post',
     data
   })
@@ -21,7 +38,7 @@ export function addUser(data) {
 // 更新用户
 export function updateUser(data) {
   return request({
-    url: '/user/update',
+    url: '/api/user/update',
     method: 'put',
     data
   })
@@ -30,7 +47,15 @@ export function updateUser(data) {
 // 删除用户
 export function deleteUser(id) {
   return request({
-    url: `/user/delete/${id}`,
+    url: `/api/user/delete/${id}`,
     method: 'delete'
+  })
+}
+
+// 获取销售人员列表
+export function getSalesStaffList() {
+  return request({
+    url: '/api/user/sales',
+    method: 'get'
   })
 } 
