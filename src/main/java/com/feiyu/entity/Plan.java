@@ -16,7 +16,11 @@ public class Plan {
     
     private String content;
     
-    private LocalDateTime planTime;
+    private LocalDateTime startDate;
+    
+    private LocalDateTime endDate;
+    
+    private Integer progress;
     
     private String status;
     

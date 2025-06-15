@@ -66,6 +66,14 @@
         <el-form-item label="标题" prop="title">
           <el-input v-model="form.title" placeholder="请输入计划标题" />
         </el-form-item>
+        <el-form-item label="内容" prop="content">
+          <el-input
+            v-model="form.content"
+            type="textarea"
+            :rows="3"
+            placeholder="请输入计划内容"
+          />
+        </el-form-item>
         <el-form-item label="开始时间" prop="startDate">
           <el-date-picker
             v-model="form.startDate"
@@ -119,6 +127,7 @@ const formRef = ref(null)
 const form = reactive({
   id: undefined,
   title: '',
+  content: '',
   startDate: '',
   endDate: '',
   progress: 0
@@ -128,6 +137,9 @@ const form = reactive({
 const rules = {
   title: [
     { required: true, message: '请输入计划标题', trigger: 'blur' }
+  ],
+  content: [
+    { required: true, message: '请输入计划内容', trigger: 'blur' }
   ],
   startDate: [
     { required: true, message: '请选择开始时间', trigger: 'change' }
@@ -153,6 +165,7 @@ const getList = async () => {
 
 // 获取时间线项目类型
 const getTimelineItemType = (progress) => {
+  if (!progress) return 'info'
   if (progress === 100) return 'success'
   if (progress >= 50) return 'primary'
   return 'warning'
@@ -160,6 +173,7 @@ const getTimelineItemType = (progress) => {
 
 // 获取进度条状态
 const getProgressStatus = (progress) => {
+  if (!progress) return 'exception'
   if (progress === 100) return 'success'
   if (progress >= 50) return ''
   return 'exception'
@@ -171,6 +185,7 @@ const handleAdd = () => {
   Object.assign(form, {
     id: undefined,
     title: '',
+    content: '',
     startDate: '',
     endDate: '',
     progress: 0
@@ -213,11 +228,16 @@ const handleSubmit = async () => {
   await formRef.value.validate(async (valid) => {
     if (valid) {
       try {
+        const submitData = {
+          ...form,
+          userId: JSON.parse(localStorage.getItem('userInfo')).id
+        }
+        
         if (dialogType.value === 'add') {
-          await addPlan(form)
+          await addPlan(submitData)
           ElMessage.success('添加成功')
         } else {
-          await updatePlan(form)
+          await updatePlan(submitData)
           ElMessage.success('更新成功')
         }
         dialogVisible.value = false

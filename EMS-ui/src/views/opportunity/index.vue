@@ -10,6 +10,41 @@
         </div>
       </template>
 
+      <!-- 添加查询表单 -->
+      <el-form :inline="true" :model="queryForm" class="query-form">
+        <el-form-item label="商机标题">
+          <el-input v-model="queryForm.title" placeholder="请输入商机标题" clearable />
+        </el-form-item>
+        <el-form-item label="客户">
+          <el-select v-model="queryForm.customerId" placeholder="请选择客户" clearable style="width: 200px">
+            <el-option
+              v-for="item in customerOptions"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="商机阶段">
+          <el-select v-model="queryForm.stage" placeholder="请选择商机阶段" clearable style="width: 200px">
+            <el-option label="初步接触" value="initial" />
+            <el-option label="谈判中" value="negotiation" />
+            <el-option label="方案制定" value="proposal" />
+            <el-option label="合同签订" value="contract" />
+            <el-option label="成交" value="success" />
+            <el-option label="失败" value="fail" />
+          </el-select>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="handleQuery">
+            <el-icon><Search /></el-icon>查询
+          </el-button>
+          <el-button @click="handleReset">
+            <el-icon><Refresh /></el-icon>重置
+          </el-button>
+        </el-form-item>
+      </el-form>
+
       <el-table
         v-loading="loading"
         :data="tableData"
@@ -152,7 +187,7 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { Plus, Edit, Delete } from '@element-plus/icons-vue'
+import { Plus, Edit, Delete, Search, Refresh } from '@element-plus/icons-vue'
 import { getOpportunityList, addOpportunity, updateOpportunity, deleteOpportunity } from '@/api/opportunity'
 import { getCustomerList } from '@/api/customer'
 
@@ -207,13 +242,21 @@ const rules = {
   ]
 }
 
+// 查询表单
+const queryForm = reactive({
+  title: '',
+  customerId: undefined,
+  stage: ''
+})
+
 // 获取商机列表
 const getList = async () => {
   loading.value = true
   try {
     const res = await getOpportunityList({
       pageNum: currentPage.value,
-      pageSize: pageSize.value
+      pageSize: pageSize.value,
+      ...queryForm
     })
     tableData.value = res.data.records
     total.value = res.data.total
@@ -301,11 +344,17 @@ const handleSubmit = async () => {
   await formRef.value.validate(async (valid) => {
     if (valid) {
       try {
+        const submitData = {
+          ...form,
+          userId: JSON.parse(localStorage.getItem('userInfo')).id,
+          expectedDate: form.expectedDate ? new Date(form.expectedDate).toISOString().split('T')[0] : null
+        }
+        
         if (dialogType.value === 'add') {
-          await addOpportunity(form)
+          await addOpportunity(submitData)
           ElMessage.success('添加成功')
         } else {
-          await updateOpportunity(form)
+          await updateOpportunity(submitData)
           ElMessage.success('更新成功')
         }
         dialogVisible.value = false
@@ -344,6 +393,22 @@ const getStageLabel = (stage) => {
   return labels[stage] || stage
 }
 
+// 查询
+const handleQuery = () => {
+  currentPage.value = 1
+  getList()
+}
+
+// 重置
+const handleReset = () => {
+  Object.assign(queryForm, {
+    title: '',
+    customerId: undefined,
+    stage: ''
+  })
+  handleQuery()
+}
+
 onMounted(() => {
   getList()
   getCustomers()
@@ -369,5 +434,12 @@ onMounted(() => {
   margin-top: 20px;
   display: flex;
   justify-content: flex-end;
+}
+
+.query-form {
+  margin-bottom: 20px;
+  padding: 20px;
+  background-color: #f5f7fa;
+  border-radius: 4px;
 }
 </style> 

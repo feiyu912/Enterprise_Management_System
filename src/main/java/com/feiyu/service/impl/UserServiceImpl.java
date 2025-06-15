@@ -122,4 +122,29 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             System.out.println("管理员密码已重置为: admin123");
         }
     }
+
+    @Override
+    public boolean save(User user) {
+        // 对密码进行MD5加密
+        if (user.getPassword() != null) {
+            user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
+        }
+        
+        // 设置默认状态
+        if (user.getStatus() == null) {
+            user.setStatus("active");
+        }
+        
+        return super.save(user);
+    }
+
+    @Override
+    public boolean updateById(User user) {
+        // 如果密码不为空，则进行加密
+        if (user.getPassword() != null && !user.getPassword().isEmpty()) {
+            user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
+        }
+        
+        return super.updateById(user);
+    }
 } 

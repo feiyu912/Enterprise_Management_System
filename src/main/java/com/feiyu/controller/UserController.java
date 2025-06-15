@@ -25,6 +25,12 @@ public class UserController {
     @GetMapping("/list")
     public Result<Page<User>> getUserList(UserQueryParam param) {
         log.info("查询用户列表，参数：{}", param);
+        if (param.getPageNum() == null) {
+            param.setPageNum(1);
+        }
+        if (param.getPageSize() == null) {
+            param.setPageSize(10);
+        }
         Page<User> page = userService.getUserPage(param);
         log.info("查询结果：{}", page);
         return Result.success(page);
