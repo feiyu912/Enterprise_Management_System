@@ -1,0 +1,17 @@
+com\feiyu\service\impl\DeptServiceImpl.class
+com\feiyu\service\ProductService.class
+com\feiyu\mapper\ProductMapper.class
+com\feiyu\controller\DeptController.class
+com\feiyu\param\ProductQueryParam.class
+com\feiyu\controller\RegionController.class
+com\feiyu\entity\Dept.class
+com\feiyu\mapper\DeptMapper.class
+com\feiyu\service\DeptService.class
+com\feiyu\service\impl\ProductServiceImpl.class
+com\feiyu\service\impl\RegionServiceImpl.class
+com\feiyu\entity\Region.class
+com\feiyu\EnterpriseManagementSystemApplication.class
+com\feiyu\mapper\RegionMapper.class
+com\feiyu\controller\ProductController.class
+com\feiyu\service\RegionService.class
+com\feiyu\entity\Product.class
