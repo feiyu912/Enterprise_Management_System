@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-// 用户登录
+// 登录
 export function login(data) {
   return request({
     url: '/api/user/login',
@@ -14,6 +14,14 @@ export function getUserInfo() {
   return request({
     url: '/api/user/info',
     method: 'get'
+  })
+}
+
+// 登出
+export function logout() {
+  return request({
+    url: '/api/user/logout',
+    method: 'post'
   })
 }
 

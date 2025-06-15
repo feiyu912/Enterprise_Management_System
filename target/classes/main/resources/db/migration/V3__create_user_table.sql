@@ -35,4 +35,11 @@ VALUES
 
 -- 非活跃用户
 ('sales6', '$2a$10$X/uMNuiw1UwMvqF3Uxw2sO9J9Z9Z9Z9Z9Z9Z9Z9Z9Z9Z9Z9Z9Z9', '孙八', '13800138010', 'sunba@example.com', 'salesman', 'inactive'),
-('user4', '$2a$10$X/uMNuiw1UwMvqF3Uxw2sO9J9Z9Z9Z9Z9Z9Z9Z9Z9Z9Z9Z9Z9Z9Z9', '用户四', '13800138011', 'user4@example.com', 'user', 'inactive'); 
+('user4', '$2a$10$X/uMNuiw1UwMvqF3Uxw2sO9J9Z9Z9Z9Z9Z9Z9Z9Z9Z9Z9Z9Z9Z9Z9', '用户四', '13800138011', 'user4@example.com', 'user', 'inactive');
+
+
+-- 更新所有用户的密码为MD5加密后的“123456”
+
+UPDATE `user`
+SET `password` = 'e10adc3949ba59abbe56e057f20f883e'
+WHERE `id` > 0;

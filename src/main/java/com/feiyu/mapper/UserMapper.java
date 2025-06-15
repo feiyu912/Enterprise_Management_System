@@ -9,6 +9,6 @@ import java.util.List;
 
 @Mapper
 public interface UserMapper extends BaseMapper<User> {
-    @Select("SELECT * FROM user WHERE role = 'salesman' AND deleted = 0")
+    @Select("SELECT * FROM user WHERE role = 'salesman' AND status = 'active' AND deleted = 0")
     List<User> selectSalesStaff();
 } 

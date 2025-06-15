@@ -11,12 +11,13 @@
         :rules="loginRules"
         label-width="0"
         size="large"
+        @keyup.enter="handleLogin"
       >
         <el-form-item prop="username">
           <el-input
             v-model="loginForm.username"
             placeholder="用户名"
-            prefix-icon="User"
+            :prefix-icon="User"
           />
         </el-form-item>
         
@@ -25,7 +26,7 @@
             v-model="loginForm.password"
             type="password"
             placeholder="密码"
-            prefix-icon="Lock"
+            :prefix-icon="Lock"
             show-password
           />
         </el-form-item>
@@ -50,9 +51,10 @@ import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { User, Lock } from '@element-plus/icons-vue'
-import { login } from '@/api/user'
+import { useUserStore } from '@/stores/user'
 
 const router = useRouter()
+const userStore = useUserStore()
 const loginFormRef = ref(null)
 const loading = ref(false)
 
@@ -63,10 +65,12 @@ const loginForm = reactive({
 
 const loginRules = {
   username: [
-    { required: true, message: '请输入用户名', trigger: 'blur' }
+    { required: true, message: '请输入用户名', trigger: 'blur' },
+    { min: 3, max: 20, message: '用户名长度应在3-20个字符之间', trigger: 'blur' }
   ],
   password: [
-    { required: true, message: '请输入密码', trigger: 'blur' }
+    { required: true, message: '请输入密码', trigger: 'blur' },
+    { min: 6, max: 20, message: '密码长度应在6-20个字符之间', trigger: 'blur' }
   ]
 }
 
@@ -77,16 +81,12 @@ const handleLogin = async () => {
     await loginFormRef.value.validate()
     loading.value = true
     
-    const res = await login(loginForm)
-    if (res.code === 200) {
-      ElMessage.success('登录成功')
-      router.push('/')
-    } else {
-      ElMessage.error(res.msg || '登录失败')
-    }
+    await userStore.login(loginForm)
+    ElMessage.success('登录成功')
+    router.push('/')
   } catch (error) {
     console.error('登录失败:', error)
-    ElMessage.error('登录失败')
+    ElMessage.error(error.message || '登录失败')
   } finally {
     loading.value = false
   }
