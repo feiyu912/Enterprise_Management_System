@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { login as loginApi } from '@/api/user'
+import { login as loginApi, getUserInfo } from '@/api/user'
 
 export const useUserStore = defineStore('user', () => {
   const token = ref(localStorage.getItem('token') || '')
@@ -12,9 +12,15 @@ export const useUserStore = defineStore('user', () => {
       const res = await loginApi(loginForm)
       if (res.code === 200) {
         token.value = res.data.token
-        userInfo.value = res.data.userInfo
         localStorage.setItem('token', res.data.token)
-        localStorage.setItem('userInfo', JSON.stringify(res.data.userInfo))
+        
+        // 获取用户信息
+        const userInfoRes = await getUserInfo()
+        if (userInfoRes.code === 200) {
+          userInfo.value = userInfoRes.data
+          localStorage.setItem('userInfo', JSON.stringify(userInfoRes.data))
+        }
+        
         return Promise.resolve(res)
       }
       return Promise.reject(res)

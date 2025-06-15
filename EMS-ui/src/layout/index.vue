@@ -29,12 +29,22 @@
 <script setup>
 import { ArrowDown } from '@element-plus/icons-vue'
 import { useRouter } from 'vue-router'
+import { useUserStore } from '@/stores/user'
+import { ElMessage } from 'element-plus'
 import Sidebar from './components/Sidebar.vue'
 
 const router = useRouter()
+const userStore = useUserStore()
 
-const handleLogout = () => {
-  router.push('/login')
+const handleLogout = async () => {
+  try {
+    await userStore.logout()
+    ElMessage.success('退出成功')
+    router.push('/login')
+  } catch (error) {
+    console.error('退出失败:', error)
+    ElMessage.error('退出失败')
+  }
 }
 </script>
 
