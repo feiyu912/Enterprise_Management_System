@@ -8,32 +8,37 @@
     active-text-color="#409EFF"
     router
   >
-    <el-menu-item index="/dashboard">
-      <el-icon><House /></el-icon>
-      <template #title>首页</template>
-    </el-menu-item>
+    <template v-for="item in menuList" :key="item.path">
+      <!-- 没有子菜单 -->
+      <el-menu-item v-if="!item.children" :index="item.path">
+        <el-icon><component :is="item.icon" /></el-icon>
+        <template #title>{{ item.title }}</template>
+      </el-menu-item>
 
-    <el-menu-item index="/user">
-      <el-icon><User /></el-icon>
-      <template #title>用户管理</template>
-    </el-menu-item>
-
-    <el-menu-item index="/product">
-      <el-icon><Goods /></el-icon>
-      <template #title>产品管理</template>
-    </el-menu-item>
-
-    <el-menu-item index="/customer">
-      <el-icon><UserFilled /></el-icon>
-      <template #title>客户管理</template>
-    </el-menu-item>
+      <!-- 有子菜单 -->
+      <el-sub-menu v-else :index="item.path">
+        <template #title>
+          <el-icon><component :is="item.icon" /></el-icon>
+          <span>{{ item.title }}</span>
+        </template>
+        <el-menu-item
+          v-for="child in item.children"
+          :key="child.path"
+          :index="child.path"
+        >
+          <el-icon><component :is="child.icon" /></el-icon>
+          <template #title>{{ child.title }}</template>
+        </el-menu-item>
+      </el-sub-menu>
+    </template>
   </el-menu>
 </template>
 
 <script setup>
 import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { House, User, Goods, UserFilled } from '@element-plus/icons-vue'
+import { House, User, Goods, UserFilled, Calendar, Setting } from '@element-plus/icons-vue'
+import menuList from '@/config/menu'
 
 const route = useRoute()
 const isCollapse = ref(false)

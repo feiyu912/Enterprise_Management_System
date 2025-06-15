@@ -29,6 +29,24 @@ const routes = [
         name: 'Customer',
         component: () => import('@/views/customer/index.vue'),
         meta: { title: '客户管理', icon: 'UserFilled' }
+      },
+      {
+        path: 'opportunity',
+        name: 'Opportunity',
+        component: () => import('@/views/opportunity/index.vue'),
+        meta: { title: '商机管理', icon: 'Opportunity' }
+      },
+      {
+        path: 'plan',
+        name: 'Plan',
+        component: () => import('@/views/plan/index.vue'),
+        meta: { title: '关系管理', icon: 'Calendar' }
+      },
+      {
+        path: 'role',
+        name: 'Role',
+        component: () => import('@/views/role/index.vue'),
+        meta: { title: '角色管理', icon: 'UserFilled' }
       }
     ]
   },
